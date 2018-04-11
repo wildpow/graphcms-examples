@@ -2,27 +2,15 @@ import React from 'react'
 import gql from 'graphql-tag'
 import { Query } from 'react-apollo'
 
-const allAuthors = gql`
-  query allAuthors {
-    allAuthors {
-      id
-      name
-      bibliography
-      avatar {
-        handle
-      }
-    }
-  }
-`
 const About = () => (
   <Query query={allAuthors}>
-    {({ loading, error, data }) => {
-      if (loading || !data) return <h2>Loading author...</h2>
+    {({ loading, error, data: { allAuthors } }) => {
+      if (loading || !allAuthors) return <h2>Loading author...</h2>
       if (error) return <h1>Error fetching authors!</h1>
       
       return (
         <div>
-          {data.allAuthors.map(author => (
+          {allAuthors.map(author => (
             <div className='About-author' key={author.id}>
               <div className='About-infoHeader'>
                 <img
@@ -41,5 +29,17 @@ const About = () => (
   </Query>
 )
 
+const allAuthors = gql`
+  query allAuthors {
+    allAuthors {
+      id
+      name
+      bibliography
+      avatar {
+        handle
+      }
+    }
+  }
+`
 export default About
 
